@@ -1,5 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, ActivityIndicator, View } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, View, StyleSheet } from 'react-native';
+import { colors } from '../styles/colors';
+import { spacing, borderRadius, fontSize } from '../styles/spacing';
 
 interface ButtonProps {
   title: string;
@@ -25,48 +27,48 @@ export const Button: React.FC<ButtonProps> = ({
   const getVariantStyles = () => {
     switch (variant) {
       case 'primary':
-        return 'bg-primary-600 active:bg-primary-700';
+        return styles.primaryButton;
       case 'secondary':
-        return 'bg-secondary-500 active:bg-secondary-600';
+        return styles.secondaryButton;
       case 'outline':
-        return 'bg-transparent border-2 border-primary-600 active:bg-primary-50';
+        return styles.outlineButton;
       case 'danger':
-        return 'bg-red-600 active:bg-red-700';
+        return styles.dangerButton;
       default:
-        return 'bg-primary-600 active:bg-primary-700';
+        return styles.primaryButton;
     }
   };
 
   const getTextStyles = () => {
     if (variant === 'outline') {
-      return 'text-primary-600 font-semibold';
+      return styles.outlineButtonText;
     }
-    return 'text-white font-semibold';
+    return styles.buttonText;
   };
 
   const getSizeStyles = () => {
     switch (size) {
       case 'small':
-        return 'px-3 py-2';
+        return styles.smallButton;
       case 'medium':
-        return 'px-4 py-3';
+        return styles.mediumButton;
       case 'large':
-        return 'px-6 py-4';
+        return styles.largeButton;
       default:
-        return 'px-4 py-3';
+        return styles.mediumButton;
     }
   };
 
   const getTextSizeStyles = () => {
     switch (size) {
       case 'small':
-        return 'text-sm';
+        return styles.smallText;
       case 'medium':
-        return 'text-base';
+        return styles.mediumText;
       case 'large':
-        return 'text-lg';
+        return styles.largeText;
       default:
-        return 'text-base';
+        return styles.mediumText;
     }
   };
 
@@ -74,24 +76,87 @@ export const Button: React.FC<ButtonProps> = ({
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled || loading}
-      className={`
-        rounded-xl flex-row items-center justify-center
-        ${getVariantStyles()}
-        ${getSizeStyles()}
-        ${fullWidth ? 'w-full' : ''}
-        ${disabled || loading ? 'opacity-50' : ''}
-      `}
+      style={[
+        styles.button,
+        getVariantStyles(),
+        getSizeStyles(),
+        fullWidth && styles.fullWidth,
+        (disabled || loading) && styles.disabled,
+      ]}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'outline' ? '#0057e6' : 'white'} />
+        <ActivityIndicator color={variant === 'outline' ? colors.primary[600] : colors.white} />
       ) : (
-        <>
-          {icon && <View className="mr-2">{icon}</View>}
-          <Text className={`${getTextStyles()} ${getTextSizeStyles()}`}>
-            {title}
-          </Text>
-        </>
+        <View style={styles.content}>
+          {icon && <View style={styles.icon}>{icon}</View>}
+          <Text style={[getTextStyles(), getTextSizeStyles()]}>{title}</Text>
+        </View>
       )}
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    borderRadius: borderRadius.xl,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: spacing.sm,
+  },
+  primaryButton: {
+    backgroundColor: colors.primary[600],
+  },
+  secondaryButton: {
+    backgroundColor: colors.secondary[500],
+  },
+  outlineButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: colors.primary[600],
+  },
+  dangerButton: {
+    backgroundColor: colors.red[600],
+  },
+  buttonText: {
+    color: colors.white,
+    fontWeight: '600',
+  },
+  outlineButtonText: {
+    color: colors.primary[600],
+    fontWeight: '600',
+  },
+  smallButton: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  mediumButton: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  largeButton: {
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
+  },
+  smallText: {
+    fontSize: fontSize.sm,
+  },
+  mediumText: {
+    fontSize: fontSize.base,
+  },
+  largeText: {
+    fontSize: fontSize.lg,
+  },
+  fullWidth: {
+    width: '100%',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+});

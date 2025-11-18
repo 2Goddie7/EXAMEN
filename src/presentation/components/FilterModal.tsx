@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { Button } from './Button';
+import { colors } from '../styles/colors';
+import { spacing, borderRadius, fontSize } from '../styles/spacing';
 
 interface FilterModalProps {
   visible: boolean;
@@ -47,14 +49,12 @@ export const FilterModal: React.FC<FilterModalProps> = ({
       animationType="slide"
       onRequestClose={onClose}
     >
-      <View className="flex-1 justify-end bg-black/50">
-        <View className="bg-white rounded-t-3xl p-6 max-h-[80%]">
-          <View className="flex-row justify-between items-center mb-6">
-            <Text className="text-2xl font-bold text-gray-900">
-              Filtrar por Precio
-            </Text>
+      <View style={styles.overlay}>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Filtrar por Precio</Text>
             <TouchableOpacity onPress={onClose}>
-              <Text className="text-gray-500 text-2xl">✕</Text>
+              <Text style={styles.closeButton}>✕</Text>
             </TouchableOpacity>
           </View>
 
@@ -63,18 +63,16 @@ export const FilterModal: React.FC<FilterModalProps> = ({
               <TouchableOpacity
                 key={range.label}
                 onPress={() => setSelectedRange(range.label)}
-                className={`p-4 rounded-xl mb-3 border-2 ${
-                  selectedRange === range.label
-                    ? 'border-primary-600 bg-primary-50'
-                    : 'border-gray-200 bg-white'
-                }`}
+                style={[
+                  styles.rangeButton,
+                  selectedRange === range.label && styles.rangeButtonSelected,
+                ]}
               >
                 <Text
-                  className={`text-lg font-semibold ${
-                    selectedRange === range.label
-                      ? 'text-primary-600'
-                      : 'text-gray-900'
-                  }`}
+                  style={[
+                    styles.rangeText,
+                    selectedRange === range.label && styles.rangeTextSelected,
+                  ]}
                 >
                   {range.label}
                 </Text>
@@ -82,13 +80,14 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             ))}
           </ScrollView>
 
-          <View className="mt-6 space-y-3">
+          <View style={styles.footer}>
             <Button
               title="Aplicar Filtro"
               onPress={handleApply}
               disabled={!selectedRange}
               fullWidth
             />
+            <View style={styles.spacing} />
             <Button
               title="Limpiar Filtros"
               onPress={handleClear}
@@ -101,3 +100,59 @@ export const FilterModal: React.FC<FilterModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  container: {
+    backgroundColor: colors.white,
+    borderTopLeftRadius: borderRadius.xl,
+    borderTopRightRadius: borderRadius.xl,
+    padding: spacing.xl,
+    maxHeight: '80%',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+  },
+  title: {
+    fontSize: fontSize['2xl'],
+    fontWeight: 'bold',
+    color: colors.gray[900],
+  },
+  closeButton: {
+    color: colors.gray[500],
+    fontSize: fontSize['2xl'],
+  },
+  rangeButton: {
+    padding: spacing.lg,
+    borderRadius: borderRadius.xl,
+    marginBottom: spacing.md,
+    borderWidth: 2,
+    borderColor: colors.gray[200],
+    backgroundColor: colors.white,
+  },
+  rangeButtonSelected: {
+    borderColor: colors.primary[600],
+    backgroundColor: colors.primary[50],
+  },
+  rangeText: {
+    fontSize: fontSize.lg,
+    fontWeight: '600',
+    color: colors.gray[900],
+  },
+  rangeTextSelected: {
+    color: colors.primary[600],
+  },
+  footer: {
+    marginTop: spacing.xl,
+  },
+  spacing: {
+    height: spacing.md,
+  },
+});

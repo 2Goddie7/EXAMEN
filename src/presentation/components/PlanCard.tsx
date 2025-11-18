@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PlanMovil } from '@domain/entities';
+import { colors } from '../styles/colors';
+import { spacing, borderRadius, fontSize } from '../styles/spacing';
 
 interface PlanCardProps {
   plan: PlanMovil;
@@ -31,83 +33,59 @@ export const PlanCard: React.FC<PlanCardProps> = ({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
-      className="mb-4 rounded-2xl overflow-hidden shadow-lg"
+      style={styles.container}
     >
       <LinearGradient
         colors={getGradientColors()}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="p-4"
+        style={styles.gradient}
       >
-        <View className="flex-row justify-between items-start mb-3">
-          <View className="flex-1">
-            <Text className="text-white text-xl font-bold mb-1">
-              {plan.nombre}
-            </Text>
-            <Text className="text-white/80 text-sm">
-              {plan.segmento}
-            </Text>
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <Text style={styles.planName}>{plan.nombre}</Text>
+            <Text style={styles.planSegment}>{plan.segmento}</Text>
           </View>
           
-          <View className="bg-white/20 px-3 py-2 rounded-xl">
-            <Text className="text-white text-2xl font-bold">
-              {plan.precioFormateado}
-            </Text>
-            <Text className="text-white/80 text-xs text-center">
-              /mes
-            </Text>
+          <View style={styles.priceContainer}>
+            <Text style={styles.price}>{plan.precioFormateado}</Text>
+            <Text style={styles.priceLabel}>/mes</Text>
           </View>
         </View>
 
         {plan.imagenUrl && (
           <Image
             source={{ uri: plan.imagenUrl }}
-            className="w-full h-32 rounded-xl mb-3"
+            style={styles.image}
             resizeMode="cover"
           />
         )}
 
-        <View className="space-y-2">
-          <View className="flex-row items-center">
-            <Text className="text-white text-2xl mr-2">📊</Text>
-            <Text className="text-white font-medium flex-1">
-              {plan.datosGb}
-            </Text>
+        <View style={styles.features}>
+          <View style={styles.featureRow}>
+            <Text style={styles.featureIcon}>📊</Text>
+            <Text style={styles.featureText}>{plan.datosGb}</Text>
           </View>
           
-          <View className="flex-row items-center">
-            <Text className="text-white text-2xl mr-2">📞</Text>
-            <Text className="text-white font-medium flex-1">
-              {plan.minutos}
-            </Text>
+          <View style={styles.featureRow}>
+            <Text style={styles.featureIcon}>📞</Text>
+            <Text style={styles.featureText}>{plan.minutos}</Text>
           </View>
           
-          <View className="flex-row items-center">
-            <Text className="text-white text-2xl mr-2">💬</Text>
-            <Text className="text-white font-medium flex-1">
-              SMS: {plan.sms}
-            </Text>
+          <View style={styles.featureRow}>
+            <Text style={styles.featureIcon}>💬</Text>
+            <Text style={styles.featureText}>SMS: {plan.sms}</Text>
           </View>
         </View>
 
         {showActions && (
-          <View className="flex-row mt-4 space-x-2">
-            <TouchableOpacity
-              onPress={onEdit}
-              className="flex-1 bg-white/20 py-2 rounded-lg mr-2"
-            >
-              <Text className="text-white text-center font-semibold">
-                ✏️ Editar
-              </Text>
+          <View style={styles.actions}>
+            <TouchableOpacity onPress={onEdit} style={styles.actionButtonEdit}>
+              <Text style={styles.actionButtonText}>✏️ Editar</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity
-              onPress={onDelete}
-              className="flex-1 bg-red-500/30 py-2 rounded-lg"
-            >
-              <Text className="text-white text-center font-semibold">
-                🗑️ Eliminar
-              </Text>
+            <TouchableOpacity onPress={onDelete} style={styles.actionButtonDelete}>
+              <Text style={styles.actionButtonText}>🗑️ Eliminar</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -115,3 +93,100 @@ export const PlanCard: React.FC<PlanCardProps> = ({
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: spacing.lg,
+    borderRadius: borderRadius.lg,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  gradient: {
+    padding: spacing.lg,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: spacing.md,
+  },
+  headerLeft: {
+    flex: 1,
+  },
+  planName: {
+    color: colors.white,
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
+    marginBottom: spacing.xs,
+  },
+  planSegment: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: fontSize.sm,
+  },
+  priceContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.xl,
+  },
+  price: {
+    color: colors.white,
+    fontSize: fontSize['2xl'],
+    fontWeight: 'bold',
+  },
+  priceLabel: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: fontSize.xs,
+    textAlign: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 128,
+    borderRadius: borderRadius.xl,
+    marginBottom: spacing.md,
+  },
+  features: {
+    gap: spacing.sm,
+  },
+  featureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  featureIcon: {
+    color: colors.white,
+    fontSize: 24,
+    marginRight: spacing.sm,
+  },
+  featureText: {
+    color: colors.white,
+    fontWeight: '500',
+    flex: 1,
+  },
+  actions: {
+    flexDirection: 'row',
+    marginTop: spacing.lg,
+    gap: spacing.sm,
+  },
+  actionButtonEdit: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
+    marginRight: spacing.sm,
+  },
+  actionButtonDelete: {
+    flex: 1,
+    backgroundColor: 'rgba(239, 68, 68, 0.3)',
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
+  },
+  actionButtonText: {
+    color: colors.white,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+});

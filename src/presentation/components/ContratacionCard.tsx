@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Contratacion } from '@domain/entities';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { colors } from '../styles/colors';
+import { spacing, borderRadius, fontSize } from '../styles/spacing';
 
 interface ContratacionCardProps {
   contratacion: Contratacion;
@@ -24,30 +26,29 @@ export const ContratacionCard: React.FC<ContratacionCardProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className="bg-white rounded-2xl p-4 mb-3 shadow-md border border-gray-100"
+      style={styles.container}
       activeOpacity={0.7}
     >
       {/* Header con estado */}
-      <View className="flex-row justify-between items-start mb-3">
-        <View className="flex-1">
-          <Text className="text-lg font-bold text-gray-900 mb-1">
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.planName}>
             {contratacion.plan?.nombre || 'Plan'}
           </Text>
           {showUser && contratacion.usuario && (
-            <Text className="text-sm text-gray-600">
+            <Text style={styles.userName}>
               Cliente: {contratacion.usuario.nombreMostrar}
             </Text>
           )}
         </View>
         
         <View
-          className="px-3 py-1 rounded-full"
-          style={{ backgroundColor: `${contratacion.estadoColor}20` }}
+          style={[
+            styles.badge,
+            { backgroundColor: `${contratacion.estadoColor}20` }
+          ]}
         >
-          <Text
-            className="text-xs font-semibold"
-            style={{ color: contratacion.estadoColor }}
-          >
+          <Text style={[styles.badgeText, { color: contratacion.estadoColor }]}>
             {contratacion.estadoIcono} {contratacion.estadoTexto}
           </Text>
         </View>
@@ -55,24 +56,24 @@ export const ContratacionCard: React.FC<ContratacionCardProps> = ({
 
       {/* Detalles del plan */}
       {contratacion.plan && (
-        <View className="bg-gray-50 rounded-xl p-3 mb-3">
-          <View className="flex-row justify-between mb-2">
-            <Text className="text-gray-600 text-sm">Precio</Text>
-            <Text className="text-primary-600 font-bold text-lg">
+        <View style={styles.planDetails}>
+          <View style={styles.priceRow}>
+            <Text style={styles.priceLabel}>Precio</Text>
+            <Text style={styles.price}>
               {contratacion.plan.precioFormateado}/mes
             </Text>
           </View>
           
-          <View className="flex-row items-center mb-1">
-            <Text className="text-2xl mr-2">📊</Text>
-            <Text className="text-gray-700 text-sm flex-1">
+          <View style={styles.featureRow}>
+            <Text style={styles.featureIcon}>📊</Text>
+            <Text style={styles.featureText}>
               {contratacion.plan.datosGb}
             </Text>
           </View>
           
-          <View className="flex-row items-center">
-            <Text className="text-2xl mr-2">📞</Text>
-            <Text className="text-gray-700 text-sm flex-1">
+          <View style={styles.featureRow}>
+            <Text style={styles.featureIcon}>📞</Text>
+            <Text style={styles.featureText}>
               {contratacion.plan.minutos}
             </Text>
           </View>
@@ -80,12 +81,12 @@ export const ContratacionCard: React.FC<ContratacionCardProps> = ({
       )}
 
       {/* Fecha */}
-      <View className="border-t border-gray-100 pt-3 mb-3">
-        <Text className="text-xs text-gray-500">
+      <View style={styles.dateSection}>
+        <Text style={styles.dateText}>
           Solicitado: {format(contratacion.fechaContratacion, "d 'de' MMMM, yyyy", { locale: es })}
         </Text>
         {contratacion.fechaAprobacion && (
-          <Text className="text-xs text-gray-500 mt-1">
+          <Text style={styles.dateText}>
             {contratacion.estaAprobada ? 'Aprobado' : 'Rechazado'}: {format(contratacion.fechaAprobacion, "d 'de' MMMM, yyyy", { locale: es })}
           </Text>
         )}
@@ -93,50 +94,174 @@ export const ContratacionCard: React.FC<ContratacionCardProps> = ({
 
       {/* Notas */}
       {contratacion.notas && (
-        <View className="bg-blue-50 rounded-lg p-3 mb-3">
-          <Text className="text-xs text-gray-600 font-medium mb-1">
-            Notas:
-          </Text>
-          <Text className="text-sm text-gray-700">
-            {contratacion.notas}
-          </Text>
+        <View style={styles.notesSection}>
+          <Text style={styles.notesLabel}>Notas:</Text>
+          <Text style={styles.notesText}>{contratacion.notas}</Text>
         </View>
       )}
 
       {/* Acciones para asesores */}
       {showActions && contratacion.estaPendiente && (
-        <View className="flex-row space-x-2">
+        <View style={styles.actions}>
           <TouchableOpacity
             onPress={onApprove}
-            className="flex-1 bg-green-500 py-3 rounded-xl mr-2"
+            style={styles.approveButton}
           >
-            <Text className="text-white text-center font-semibold">
-              ✅ Aprobar
-            </Text>
+            <Text style={styles.actionButtonText}>✅ Aprobar</Text>
           </TouchableOpacity>
           
           <TouchableOpacity
             onPress={onReject}
-            className="flex-1 bg-red-500 py-3 rounded-xl"
+            style={styles.rejectButton}
           >
-            <Text className="text-white text-center font-semibold">
-              ❌ Rechazar
-            </Text>
+            <Text style={styles.actionButtonText}>❌ Rechazar</Text>
           </TouchableOpacity>
         </View>
       )}
 
       {/* Botón de chat */}
       {!contratacion.estaPendiente && (
-        <TouchableOpacity
-          onPress={onPress}
-          className="bg-primary-600 py-3 rounded-xl"
-        >
-          <Text className="text-white text-center font-semibold">
-            💬 Ir al Chat
-          </Text>
+        <TouchableOpacity onPress={onPress} style={styles.chatButton}>
+          <Text style={styles.chatButtonText}>💬 Ir al Chat</Text>
         </TouchableOpacity>
       )}
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: colors.gray[100],
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: spacing.md,
+  },
+  headerLeft: {
+    flex: 1,
+  },
+  planName: {
+    fontSize: fontSize.lg,
+    fontWeight: 'bold',
+    color: colors.gray[900],
+    marginBottom: spacing.xs,
+  },
+  userName: {
+    fontSize: fontSize.sm,
+    color: colors.gray[600],
+  },
+  badge: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
+  },
+  badgeText: {
+    fontSize: fontSize.xs,
+    fontWeight: '600',
+  },
+  planDetails: {
+    backgroundColor: colors.gray[50],
+    borderRadius: borderRadius.xl,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: spacing.sm,
+  },
+  priceLabel: {
+    color: colors.gray[600],
+    fontSize: fontSize.sm,
+  },
+  price: {
+    color: colors.primary[600],
+    fontWeight: 'bold',
+    fontSize: fontSize.lg,
+  },
+  featureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.xs,
+  },
+  featureIcon: {
+    fontSize: 24,
+    marginRight: spacing.sm,
+  },
+  featureText: {
+    color: colors.gray[700],
+    fontSize: fontSize.sm,
+    flex: 1,
+  },
+  dateSection: {
+    borderTopWidth: 1,
+    borderTopColor: colors.gray[100],
+    paddingTop: spacing.md,
+    marginBottom: spacing.md,
+  },
+  dateText: {
+    fontSize: fontSize.xs,
+    color: colors.gray[500],
+    marginTop: spacing.xs,
+  },
+  notesSection: {
+    backgroundColor: colors.blue[50],
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  notesLabel: {
+    fontSize: fontSize.xs,
+    color: colors.gray[600],
+    fontWeight: '500',
+    marginBottom: spacing.xs,
+  },
+  notesText: {
+    fontSize: fontSize.sm,
+    color: colors.gray[700],
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  approveButton: {
+    flex: 1,
+    backgroundColor: colors.green[500],
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.xl,
+    marginRight: spacing.sm,
+  },
+  rejectButton: {
+    flex: 1,
+    backgroundColor: colors.red[500],
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.xl,
+  },
+  actionButtonText: {
+    color: colors.white,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+  chatButton: {
+    backgroundColor: colors.primary[600],
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.xl,
+  },
+  chatButtonText: {
+    color: colors.white,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+});

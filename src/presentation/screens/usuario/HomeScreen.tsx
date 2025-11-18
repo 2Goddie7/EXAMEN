@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { UsuarioTabScreenProps } from '../../navigation/types';
 import { usePlanesStore } from '../../store/planesStore';
@@ -9,6 +9,8 @@ import { SearchBar } from '../../components/SearchBar';
 import { FilterModal } from '../../components/FilterModal';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { EmptyState } from '../../components/EmptyState';
+import { colors } from '../../styles/colors';
+import { spacing, fontSize } from '../../styles/spacing';
 
 type Props = UsuarioTabScreenProps<'Home'>;
 
@@ -50,26 +52,24 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView style={styles.container}>
       <ScrollView
-        className="flex-1"
+        style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         {/* Header */}
-        <View className="px-6 pt-6 pb-4 bg-white border-b border-gray-100">
-          <Text className="text-3xl font-bold text-gray-900 mb-1">
-            Planes Tigo 📱
-          </Text>
-          <Text className="text-base text-gray-600">
+        <View style={styles.header}>
+          <Text style={styles.title}>Planes Tigo 📱</Text>
+          <Text style={styles.subtitle}>
             {profile ? `Hola, ${profile.nombreMostrar}` : 'Explora nuestros planes'}
           </Text>
         </View>
 
         {/* Search y Filter */}
-        <View className="px-6 pt-4">
+        <View style={styles.searchContainer}>
           <SearchBar
             value={searchQuery}
             onChangeText={handleSearch}
@@ -80,7 +80,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
         {/* Planes */}
-        <View className="px-6 pb-6">
+        <View style={styles.planesContainer}>
           {planes.length === 0 ? (
             <EmptyState
               icon="🔍"
@@ -110,5 +110,41 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.gray[50],
+  },
+  scrollView: {
+    flex: 1,
+  },
+  header: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.lg,
+    backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gray[100],
+  },
+  title: {
+    fontSize: fontSize['3xl'],
+    fontWeight: 'bold',
+    color: colors.gray[900],
+    marginBottom: spacing.xs,
+  },
+  subtitle: {
+    fontSize: fontSize.base,
+    color: colors.gray[600],
+  },
+  searchContainer: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.lg,
+  },
+  planesContainer: {
+    paddingHorizontal: spacing.xl,
+    paddingBottom: spacing.xl,
+  },
+});
 
 export default HomeScreen;

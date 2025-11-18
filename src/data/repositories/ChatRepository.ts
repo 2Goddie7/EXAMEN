@@ -1,4 +1,4 @@
-import { supabase } from '../../core/supabase/database.types';
+import { supabase } from '@core/supabase/client';
 import { MensajeChat, Perfil, SendMessageDTO, ChatTyping } from '@domain/entities';
 import { RealtimeChannel } from '@supabase/supabase-js';
 

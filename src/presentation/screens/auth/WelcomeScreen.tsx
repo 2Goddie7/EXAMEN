@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthStackScreenProps } from '../../navigation/types';
 import { Button } from '../../components/Button';
 import { usePlanesStore } from '../../store/planesStore';
+import { colors } from '../../styles/colors';
+import { spacing, fontSize } from '../../styles/spacing';
 
 type Props = AuthStackScreenProps<'Welcome'>;
 
@@ -12,53 +14,42 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
   const { fetchPlanes } = usePlanesStore();
 
   useEffect(() => {
-    // Cargar planes para usuarios invitados
     fetchPlanes();
   }, []);
 
   return (
     <LinearGradient
-      colors={['#0057e6', '#003180']}
-      className="flex-1"
+      colors={[colors.primary[600], colors.primary[800]]}
+      style={styles.gradient}
     >
-      <SafeAreaView className="flex-1 px-6">
-        <View className="flex-1 justify-center items-center">
+      <SafeAreaView style={styles.container}>
+        <View style={styles.content}>
           {/* Logo y Título */}
-          <View className="items-center mb-12">
-            <Text className="text-7xl mb-4">📱</Text>
-            <Text className="text-white text-4xl font-bold mb-2">
-              Tigo Conecta
-            </Text>
-            <Text className="text-white/80 text-lg text-center">
-              Tu conexión perfecta empieza aquí
-            </Text>
+          <View style={styles.logoContainer}>
+            <Text style={styles.logoIcon}>📱</Text>
+            <Text style={styles.title}>Tigo Conecta</Text>
+            <Text style={styles.subtitle}>Tu conexión perfecta empieza aquí</Text>
           </View>
 
           {/* Características */}
-          <View className="w-full mb-12">
-            <View className="flex-row items-center mb-4">
-              <Text className="text-3xl mr-3">✨</Text>
-              <Text className="text-white text-base flex-1">
-                Planes móviles a tu medida
-              </Text>
+          <View style={styles.features}>
+            <View style={styles.featureRow}>
+              <Text style={styles.featureIcon}>✨</Text>
+              <Text style={styles.featureText}>Planes móviles a tu medida</Text>
             </View>
-            <View className="flex-row items-center mb-4">
-              <Text className="text-3xl mr-3">💬</Text>
-              <Text className="text-white text-base flex-1">
-                Chat en tiempo real con asesores
-              </Text>
+            <View style={styles.featureRow}>
+              <Text style={styles.featureIcon}>💬</Text>
+              <Text style={styles.featureText}>Chat en tiempo real con asesores</Text>
             </View>
-            <View className="flex-row items-center">
-              <Text className="text-3xl mr-3">🚀</Text>
-              <Text className="text-white text-base flex-1">
-                Gestión rápida y segura
-              </Text>
+            <View style={styles.featureRow}>
+              <Text style={styles.featureIcon}>🚀</Text>
+              <Text style={styles.featureText}>Gestión rápida y segura</Text>
             </View>
           </View>
         </View>
 
         {/* Botones */}
-        <View className="pb-8">
+        <View style={styles.footer}>
           <Button
             title="Ver Planes"
             onPress={() => navigation.navigate('Login')}
@@ -66,7 +57,7 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
             size="large"
             fullWidth
           />
-          <View className="h-3" />
+          <View style={styles.buttonSpacing} />
           <Button
             title="Iniciar Sesión"
             onPress={() => navigation.navigate('Login')}
@@ -74,15 +65,13 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
             size="large"
             fullWidth
           />
-          <View className="mt-4">
-            <Text className="text-white/60 text-center text-sm">
-              ¿No tienes cuenta?{' '}
-              <Text
-                onPress={() => navigation.navigate('Register')}
-                className="text-white font-semibold"
-              >
-                Regístrate aquí
-              </Text>
+          <View style={styles.registerContainer}>
+            <Text style={styles.registerText}>¿No tienes cuenta? </Text>
+            <Text
+              onPress={() => navigation.navigate('Register')}
+              style={styles.registerLink}
+            >
+              Regístrate aquí
             </Text>
           </View>
         </View>
@@ -90,5 +79,78 @@ const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
     </LinearGradient>
   );
 };
+
+const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: spacing.xl,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: spacing.xxl * 2,
+  },
+  logoIcon: {
+    fontSize: 70,
+    marginBottom: spacing.lg,
+  },
+  title: {
+    color: colors.white,
+    fontSize: fontSize['4xl'],
+    fontWeight: 'bold',
+    marginBottom: spacing.sm,
+  },
+  subtitle: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: fontSize.lg,
+    textAlign: 'center',
+  },
+  features: {
+    width: '100%',
+    marginBottom: spacing.xxl,
+  },
+  featureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.lg,
+  },
+  featureIcon: {
+    fontSize: 30,
+    marginRight: spacing.md,
+  },
+  featureText: {
+    color: colors.white,
+    fontSize: fontSize.base,
+    flex: 1,
+  },
+  footer: {
+    paddingBottom: spacing.xxl,
+  },
+  buttonSpacing: {
+    height: spacing.md,
+  },
+  registerContainer: {
+    marginTop: spacing.lg,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  registerText: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: fontSize.sm,
+    textAlign: 'center',
+  },
+  registerLink: {
+    color: colors.white,
+    fontWeight: '600',
+    fontSize: fontSize.sm,
+  },
+});
 
 export default WelcomeScreen;

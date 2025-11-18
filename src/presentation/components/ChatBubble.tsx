@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { MensajeChat } from '@domain/entities';
+import { colors } from '../styles/colors';
+import { spacing, borderRadius, fontSize } from '../styles/spacing';
 
 interface ChatBubbleProps {
   mensaje: MensajeChat;
@@ -9,37 +11,30 @@ interface ChatBubbleProps {
 
 export const ChatBubble: React.FC<ChatBubbleProps> = ({ mensaje, isMine }) => {
   return (
-    <View
-      className={`mb-3 flex-row ${isMine ? 'justify-end' : 'justify-start'}`}
-    >
+    <View style={[styles.container, isMine ? styles.containerMine : styles.containerOther]}>
       <View
-        className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-          isMine
-            ? 'bg-primary-600 rounded-br-sm'
-            : 'bg-gray-200 rounded-bl-sm'
-        }`}
+        style={[
+          styles.bubble,
+          isMine ? styles.bubbleMine : styles.bubbleOther,
+        ]}
       >
         {!isMine && mensaje.remitente && (
-          <Text className="text-xs text-gray-600 font-semibold mb-1">
+          <Text style={styles.senderName}>
             {mensaje.remitente.nombreMostrar}
           </Text>
         )}
         
-        <Text className={`text-base ${isMine ? 'text-white' : 'text-gray-900'}`}>
+        <Text style={[styles.message, isMine ? styles.messageMine : styles.messageOther]}>
           {mensaje.mensaje}
         </Text>
         
-        <View className="flex-row items-center justify-end mt-1">
-          <Text
-            className={`text-xs ${
-              isMine ? 'text-white/70' : 'text-gray-500'
-            }`}
-          >
+        <View style={styles.footer}>
+          <Text style={[styles.time, isMine ? styles.timeMine : styles.timeOther]}>
             {mensaje.horaFormateada}
           </Text>
           
           {isMine && (
-            <Text className="text-xs text-white/70 ml-1">
+            <Text style={styles.checkmark}>
               {mensaje.leido ? '✓✓' : '✓'}
             </Text>
           )}
@@ -48,3 +43,65 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ mensaje, isMine }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: spacing.md,
+    flexDirection: 'row',
+  },
+  containerMine: {
+    justifyContent: 'flex-end',
+  },
+  containerOther: {
+    justifyContent: 'flex-start',
+  },
+  bubble: {
+    maxWidth: '75%',
+    borderRadius: borderRadius.lg,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  bubbleMine: {
+    backgroundColor: colors.primary[600],
+    borderBottomRightRadius: 4,
+  },
+  bubbleOther: {
+    backgroundColor: colors.gray[200],
+    borderBottomLeftRadius: 4,
+  },
+  senderName: {
+    fontSize: fontSize.xs,
+    color: colors.gray[600],
+    fontWeight: '600',
+    marginBottom: spacing.xs,
+  },
+  message: {
+    fontSize: fontSize.base,
+  },
+  messageMine: {
+    color: colors.white,
+  },
+  messageOther: {
+    color: colors.gray[900],
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: spacing.xs,
+  },
+  time: {
+    fontSize: fontSize.xs,
+  },
+  timeMine: {
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  timeOther: {
+    color: colors.gray[500],
+  },
+  checkmark: {
+    fontSize: fontSize.xs,
+    color: 'rgba(255, 255, 255, 0.7)',
+    marginLeft: spacing.xs,
+  },
+});

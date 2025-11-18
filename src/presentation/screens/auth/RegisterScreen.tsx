@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthStackScreenProps } from '../../navigation/types';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { useAuthStore } from '../../store/authStore';
+import { colors } from '../../styles/colors';
+import { spacing, fontSize } from '../../styles/spacing';
 
 type Props = AuthStackScreenProps<'Register'>;
 
@@ -68,29 +70,25 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
-        <View className="pt-8 pb-6">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mb-6">
-            <Text className="text-2xl">←</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
           
-          <Text className="text-3xl font-bold text-gray-900 mb-2">
-            Crear Cuenta 🚀
-          </Text>
-          <Text className="text-base text-gray-600">
-            Únete a Tigo Conecta hoy
-          </Text>
+          <Text style={styles.title}>Crear Cuenta 🚀</Text>
+          <Text style={styles.subtitle}>Únete a Tigo Conecta hoy</Text>
         </View>
 
-        <View className="py-6">
+        <View style={styles.form}>
           <Input
             label="Nombre Completo"
             value={nombreCompleto}
             onChangeText={setNombreCompleto}
             placeholder="Juan Pérez"
             error={errors.nombreCompleto}
-            icon={<Text className="text-xl">👤</Text>}
+            icon={<Text style={styles.inputIcon}>👤</Text>}
           />
 
           <Input
@@ -101,7 +99,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             keyboardType="email-address"
             autoCapitalize="none"
             error={errors.email}
-            icon={<Text className="text-xl">📧</Text>}
+            icon={<Text style={styles.inputIcon}>📧</Text>}
           />
 
           <Input
@@ -111,8 +109,8 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             placeholder="••••••••"
             secureTextEntry={!showPassword}
             error={errors.password}
-            icon={<Text className="text-xl">🔒</Text>}
-            rightIcon={<Text className="text-xl">{showPassword ? '👁️' : '👁️‍🗨️'}</Text>}
+            icon={<Text style={styles.inputIcon}>🔒</Text>}
+            rightIcon={<Text style={styles.inputIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>}
             onRightIconPress={() => setShowPassword(!showPassword)}
           />
 
@@ -123,7 +121,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             placeholder="••••••••"
             secureTextEntry={!showPassword}
             error={errors.confirmPassword}
-            icon={<Text className="text-xl">🔒</Text>}
+            icon={<Text style={styles.inputIcon}>🔒</Text>}
           />
 
           <Button
@@ -136,12 +134,12 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           />
         </View>
 
-        <View className="py-8 items-center">
-          <Text className="text-gray-600 text-base">
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
             ¿Ya tienes cuenta?{' '}
             <Text
               onPress={() => navigation.navigate('Login')}
-              className="text-primary-600 font-semibold"
+              style={styles.footerLink}
             >
               Inicia Sesión
             </Text>
@@ -152,4 +150,53 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default RegisterScreen;  
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: spacing.xl,
+  },
+  header: {
+    paddingTop: spacing.xxl,
+    paddingBottom: spacing.xl,
+  },
+  backButton: {
+    marginBottom: spacing.xl,
+  },
+  backIcon: {
+    fontSize: fontSize['2xl'],
+  },
+  title: {
+    fontSize: fontSize['3xl'],
+    fontWeight: 'bold',
+    color: colors.gray[900],
+    marginBottom: spacing.sm,
+  },
+  subtitle: {
+    fontSize: fontSize.base,
+    color: colors.gray[600],
+  },
+  form: {
+    paddingVertical: spacing.xl,
+  },
+  inputIcon: {
+    fontSize: 20,
+  },
+  footer: {
+    paddingVertical: spacing.xxl,
+    alignItems: 'center',
+  },
+  footerText: {
+    color: colors.gray[600],
+    fontSize: fontSize.base,
+  },
+  footerLink: {
+    color: colors.primary[600],
+    fontWeight: '600',
+  },
+});
+
+export default RegisterScreen;
