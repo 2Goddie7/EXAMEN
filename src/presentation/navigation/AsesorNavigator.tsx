@@ -41,7 +41,7 @@ const TabNavigator: React.FC = () => {
     >
       <Tab.Screen
         name="Dashboard"
-        component={DashboardScreen}
+        component={DashboardScreen as React.ComponentType<any>} // changed: cast to any
         options={{
           tabBarLabel: 'Planes',
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>📱</Text>,
@@ -49,7 +49,7 @@ const TabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Contrataciones"
-        component={ContratacionesScreen}
+        component={ContratacionesScreen as React.ComponentType<any>} // changed: cast to any
         options={{
           tabBarLabel: 'Solicitudes',
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>📋</Text>,
@@ -57,7 +57,7 @@ const TabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Chats"
-        component={ChatsScreen}
+        component={ChatsScreen as React.ComponentType<any>} // changed: cast to any
         options={{
           tabBarLabel: 'Chats',
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>💬</Text>,
@@ -65,7 +65,7 @@ const TabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Perfil"
-        component={PerfilScreen}
+        component={PerfilScreen as React.ComponentType<any>} // changed: cast to any
         options={{
           tabBarLabel: 'Perfil',
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>👤</Text>,
@@ -78,14 +78,14 @@ const TabNavigator: React.FC = () => {
 export const AsesorNavigator: React.FC = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="MainTabs" component={TabNavigator} />
-      <Stack.Screen name="CreatePlan" component={CreatePlanScreen} />
-      <Stack.Screen name="EditPlan" component={EditPlanScreen} />
-      <Stack.Screen name="PlanDetail" component={PlanDetailScreen} />
-      <Stack.Screen name="ContratacionDetail" component={ContratacionDetailScreen} />
-      <Stack.Screen name="Chat" component={ChatsScreen} />
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+      <Stack.Screen name="MainTabs" component={TabNavigator as React.ComponentType<any>} />
+      <Stack.Screen name="CreatePlan" component={CreatePlanScreen as React.ComponentType<any>} />
+      <Stack.Screen name="EditPlan" component={EditPlanScreen as React.ComponentType<any>} />
+      <Stack.Screen name="PlanDetail" component={PlanDetailScreen as React.ComponentType<any>} />
+      <Stack.Screen name="ContratacionDetail" component={ContratacionDetailScreen as React.ComponentType<any>} />
+      <Stack.Screen name="Chat" component={ChatsScreen as React.ComponentType<any>} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen as React.ComponentType<any>} />
+      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen as React.ComponentType<any>} />
     </Stack.Navigator>
   );
 };
