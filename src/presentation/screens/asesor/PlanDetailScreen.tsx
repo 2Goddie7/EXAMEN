@@ -6,6 +6,7 @@ import { AsesorStackScreenProps } from '../../navigation/types';
 import { usePlanesStore } from '../../store/planesStore';
 import { Button } from '../../components/Button';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { styles } from '../../styles/PlanDetailStyles'
 
 
 type Props = AsesorStackScreenProps<'PlanDetail'>;
