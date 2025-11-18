@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AsesorStackScreenProps } from '../../navigation/types';
 import { useChatStore } from '../../store/chatStore';
 import { useAuthStore } from '../../store/authStore';
 import { ChatBubble } from '../../components/ChatBubble';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { colors } from '../../styles/colors';
+import { spacing, borderRadius, fontSize } from '../../styles/spacing';
 
 type Props = AsesorStackScreenProps<'Chat'>;
 
@@ -58,23 +60,27 @@ const ChatScreen: React.FC<Props> = ({ navigation, route }) => {
   if (!user) return <LoadingSpinner />;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="px-6 py-4 border-b border-gray-200 flex-row items-center">
-        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4">
-          <Text className="text-2xl">←</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Text style={styles.backIcon}>←</Text>
         </TouchableOpacity>
         <View>
-          <Text className="text-xl font-bold">Chat con Cliente</Text>
+          <Text style={styles.headerTitle}>Chat con Cliente</Text>
           {isOtherUserTyping && (
-            <Text className="text-sm text-green-600">escribiendo...</Text>
+            <Text style={styles.typingIndicator}>escribiendo...</Text>
           )}
         </View>
       </View>
 
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined} 
+        style={styles.flex}
+      >
         <ScrollView
           ref={scrollViewRef}
-          className="flex-1 px-6 py-4"
+          style={styles.messagesContainer}
+          contentContainerStyle={styles.messagesContent}
           onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
         >
           {chatMessages.map((msg) => (
@@ -82,20 +88,91 @@ const ChatScreen: React.FC<Props> = ({ navigation, route }) => {
           ))}
         </ScrollView>
 
-        <View className="px-6 py-4 border-t border-gray-200 flex-row items-center">
+        <View style={styles.inputContainer}>
           <TextInput
             value={message}
             onChangeText={handleTextChange}
             placeholder="Escribe un mensaje..."
-            className="flex-1 bg-gray-100 rounded-full px-4 py-3 mr-2"
+            placeholderTextColor={colors.gray[400]}
+            style={styles.input}
           />
-          <TouchableOpacity onPress={handleSend} className="bg-primary-600 w-12 h-12 rounded-full items-center justify-center">
-            <Text className="text-white text-xl">➤</Text>
+          <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+            <Text style={styles.sendIcon}>➤</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  flex: {
+    flex: 1,
+  },
+  header: {
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gray[200],
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    marginRight: spacing.lg,
+  },
+  backIcon: {
+    fontSize: fontSize['2xl'],
+  },
+  headerTitle: {
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
+    color: colors.gray[900],
+  },
+  typingIndicator: {
+    fontSize: fontSize.sm,
+    color: colors.green[600],
+  },
+  messagesContainer: {
+    flex: 1,
+  },
+  messagesContent: {
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
+  },
+  inputContainer: {
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: colors.gray[200],
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  input: {
+    flex: 1,
+    backgroundColor: colors.gray[100],
+    borderRadius: borderRadius.full,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    marginRight: spacing.sm,
+    fontSize: fontSize.base,
+    color: colors.gray[900],
+  },
+  sendButton: {
+    backgroundColor: colors.primary[600],
+    width: 48,
+    height: 48,
+    borderRadius: borderRadius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sendIcon: {
+    color: colors.white,
+    fontSize: fontSize.xl,
+  },
+});
 
 export default ChatScreen;

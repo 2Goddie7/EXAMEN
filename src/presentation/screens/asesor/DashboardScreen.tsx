@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AsesorTabScreenProps } from '../../navigation/types';
 import { usePlanesStore } from '../../store/planesStore';
@@ -8,6 +8,8 @@ import { SearchBar } from '../../components/SearchBar';
 import { FilterModal } from '../../components/FilterModal';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { EmptyState } from '../../components/EmptyState';
+import { colors } from '../../styles/colors';
+import { spacing, borderRadius, fontSize } from '../../styles/spacing';
 
 type Props = AsesorTabScreenProps<'Dashboard'>;
 
@@ -47,16 +49,16 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
   if (isLoading && planes.length === 0) return <LoadingSpinner />;
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView style={styles.container}>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View className="px-6 pt-6 pb-4 bg-white border-b border-gray-100">
-          <Text className="text-3xl font-bold text-gray-900 mb-1">Dashboard 📊</Text>
-          <Text className="text-base text-gray-600">Gestiona tus planes</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>Dashboard 📊</Text>
+          <Text style={styles.subtitle}>Gestiona tus planes</Text>
         </View>
 
-        <View className="px-6 pt-4">
+        <View style={styles.searchContainer}>
           <SearchBar
             value={searchQuery}
             onChangeText={searchPlanes}
@@ -66,7 +68,7 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           />
         </View>
 
-        <View className="px-6 pb-6">
+        <View style={styles.planesContainer}>
           {planes.length === 0 ? (
             <EmptyState
               icon="📱"
@@ -92,9 +94,9 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={() => navigation.navigate('CreatePlan')}
-        className="absolute bottom-6 right-6 bg-primary-600 w-16 h-16 rounded-full items-center justify-center shadow-lg"
+        style={styles.fab}
       >
-        <Text className="text-white text-3xl">+</Text>
+        <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
 
       <FilterModal
@@ -106,5 +108,59 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.gray[50],
+  },
+  header: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.lg,
+    backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.gray[100],
+  },
+  title: {
+    fontSize: fontSize['3xl'],
+    fontWeight: 'bold',
+    color: colors.gray[900],
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: fontSize.base,
+    color: colors.gray[600],
+  },
+  searchContainer: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.lg,
+  },
+  planesContainer: {
+    paddingHorizontal: spacing.xl,
+    paddingBottom: spacing.xl,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: spacing.xl,
+    right: spacing.xl,
+    backgroundColor: colors.primary[600],
+    width: 64,
+    height: 64,
+    borderRadius: borderRadius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  fabIcon: {
+    color: colors.white,
+    fontSize: 32,
+    fontWeight: 'bold',
+  },
+});
 
 export default DashboardScreen;

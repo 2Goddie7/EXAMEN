@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AsesorStackScreenProps } from '../../navigation/types';
 import { usePlanesStore } from '../../store/planesStore';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { CreatePlanDTO } from '@domain/entities';
+import { colors } from '../../styles/colors';
+import { spacing, borderRadius, fontSize } from '../../styles/spacing';
 
 type Props = AsesorStackScreenProps<'CreatePlan'>;
 
@@ -58,20 +60,20 @@ const CreatePlanScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-6">
-        <View className="pt-4 pb-6">
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-2xl">←</Text>
+            <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-gray-900 mt-4">Crear Plan 📱</Text>
+          <Text style={styles.title}>Crear Plan 📱</Text>
         </View>
 
-        <TouchableOpacity onPress={handleSelectImage} className="bg-gray-100 h-48 rounded-xl mb-6 items-center justify-center">
+        <TouchableOpacity onPress={handleSelectImage} style={styles.imageContainer}>
           {imageUri ? (
-            <Image source={{ uri: imageUri }} className="w-full h-full rounded-xl" resizeMode="cover" />
+            <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />
           ) : (
-            <Text className="text-gray-500">📷 Seleccionar Imagen</Text>
+            <Text style={styles.imagePlaceholder}>📷 Seleccionar Imagen</Text>
           )}
         </TouchableOpacity>
 
@@ -90,10 +92,54 @@ const CreatePlanScreen: React.FC<Props> = ({ navigation }) => {
         <Input label="Público Objetivo *" value={formData.publicoObjetivo} onChangeText={(text) => setFormData({ ...formData, publicoObjetivo: text })} />
 
         <Button title="Crear Plan" onPress={handleSubmit} loading={loading} disabled={loading} size="large" fullWidth />
-        <View className="h-8" />
+        <View style={styles.bottomSpacing} />
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: spacing.xl,
+  },
+  headerContainer: {
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xl,
+  },
+  backIcon: {
+    fontSize: fontSize['2xl'],
+  },
+  title: {
+    fontSize: fontSize['3xl'],
+    fontWeight: 'bold',
+    color: colors.gray[900],
+    marginTop: spacing.lg,
+  },
+  imageContainer: {
+    backgroundColor: colors.gray[100],
+    height: 192,
+    borderRadius: borderRadius.xl,
+    marginBottom: spacing.xl,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: borderRadius.xl,
+  },
+  imagePlaceholder: {
+    color: colors.gray[500],
+    fontSize: fontSize.base,
+  },
+  bottomSpacing: {
+    height: spacing.xl,
+  },
+});
 
 export default CreatePlanScreen;

@@ -9,7 +9,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 type Props = UsuarioStackScreenProps<'Chat'>;
 
-const ChatScreen: React.FC<Props> = ({ navigation, route }) => {
+const ChatsScreen: React.FC<Props> = ({ navigation, route }) => {
   const { contratacionId } = route.params;
   const { messages, isTyping, fetchMessages, sendMessage, markAsRead, updateTypingStatus, clearTypingStatus, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
   const { user, profile } = useAuthStore();
@@ -98,4 +98,4 @@ const ChatScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default ChatScreen;
+export default ChatsScreen;

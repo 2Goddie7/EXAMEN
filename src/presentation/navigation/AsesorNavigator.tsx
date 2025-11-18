@@ -13,7 +13,6 @@ import CreatePlanScreen from '../screens/asesor/CreatePlanScreen';
 import EditPlanScreen from '../screens/asesor/EditPlan';
 import PlanDetailScreen from '../screens/asesor/PlanDetailScreen';
 import ContratacionDetailScreen from '../screens/asesor/ContratacionDetailScreen';
-import ChatScreen from '../screens/asesor/ChatsScreen';
 import EditProfileScreen from '../screens/asesor/EditProfileScreen';
 import ResetPasswordScreen from '../screens/asesor/ResetPasswordScreen';
 
@@ -84,7 +83,7 @@ export const AsesorNavigator: React.FC = () => {
       <Stack.Screen name="EditPlan" component={EditPlanScreen} />
       <Stack.Screen name="PlanDetail" component={PlanDetailScreen} />
       <Stack.Screen name="ContratacionDetail" component={ContratacionDetailScreen} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="Chat" component={ChatsScreen} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
     </Stack.Navigator>
