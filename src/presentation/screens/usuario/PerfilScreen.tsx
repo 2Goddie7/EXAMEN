@@ -20,37 +20,156 @@ const PerfilScreen: React.FC<Props> = ({ navigation }) => {
   if (!profile) return null;
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      <View className="px-6 pt-6 pb-4 bg-white border-b border-gray-100">
-        <Text className="text-3xl font-bold text-gray-900">Mi Perfil 👤</Text>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: '#F9FAFB', // gray-50
+      }}
+    >
+      <View
+        style={{
+          paddingHorizontal: 24,
+          paddingTop: 24,
+          paddingBottom: 16,
+          backgroundColor: '#FFFFFF',
+          borderBottomWidth: 1,
+          borderBottomColor: '#F3F4F6', // gray-100
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 30,
+            fontWeight: 'bold',
+            color: '#111827', // gray-900
+          }}
+        >
+          Mi Perfil 👤
+        </Text>
       </View>
 
-      <ScrollView className="flex-1 px-6 pt-6">
-        <View className="bg-white rounded-2xl p-6 mb-4">
-          <View className="items-center mb-6">
-            <View className="w-24 h-24 bg-primary-600 rounded-full items-center justify-center mb-3">
-              <Text className="text-4xl text-white">{profile.nombreMostrar[0].toUpperCase()}</Text>
+      <ScrollView
+        style={{
+          flex: 1,
+          paddingHorizontal: 24,
+          paddingTop: 24,
+        }}
+      >
+        <View
+          style={{
+            backgroundColor: '#FFFFFF',
+            borderRadius: 16,
+            padding: 24,
+            marginBottom: 16,
+          }}
+        >
+          {/* Avatar + Nombre */}
+          <View
+            style={{
+              alignItems: 'center',
+              marginBottom: 24,
+            }}
+          >
+            <View
+              style={{
+                width: 96, // w-24
+                height: 96, // h-24
+                backgroundColor: '#2563EB', // primary-600 approx
+                borderRadius: 9999,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 12,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 36, // text-4xl
+                  color: '#FFFFFF',
+                }}
+              >
+                {profile.nombreMostrar[0].toUpperCase()}
+              </Text>
             </View>
-            <Text className="text-2xl font-bold text-gray-900">{profile.nombreMostrar}</Text>
-            <Text className="text-gray-600">{profile.email}</Text>
+
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: '#111827',
+              }}
+            >
+              {profile.nombreMostrar}
+            </Text>
+
+            <Text
+              style={{
+                color: '#4B5563', // gray-600
+              }}
+            >
+              {profile.email}
+            </Text>
           </View>
 
-          <View className="space-y-3">
-            <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} className="bg-gray-50 p-4 rounded-xl flex-row justify-between items-center">
-              <Text className="text-base font-semibold text-gray-900">✏️ Editar Perfil</Text>
-              <Text className="text-gray-400">→</Text>
+          {/* Opciones */}
+          <View style={{ gap: 12 }}>
+            {/* Editar perfil */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate('EditProfile')}
+              style={{
+                backgroundColor: '#F9FAFB', // gray-50
+                padding: 16,
+                borderRadius: 12,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: '600',
+                  color: '#111827',
+                }}
+              >
+                ✏️ Editar Perfil
+              </Text>
+              <Text style={{ color: '#9CA3AF' }}>→</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')} className="bg-gray-50 p-4 rounded-xl flex-row justify-between items-center">
-              <Text className="text-base font-semibold text-gray-900">🔑 Cambiar Contraseña</Text>
-              <Text className="text-gray-400">→</Text>
+            {/* Cambiar contraseña */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ResetPassword')}
+              style={{
+                backgroundColor: '#F9FAFB',
+                padding: 16,
+                borderRadius: 12,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: '600',
+                  color: '#111827',
+                }}
+              >
+                🔑 Cambiar Contraseña
+              </Text>
+              <Text style={{ color: '#9CA3AF' }}>→</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Button title="Cerrar Sesión" onPress={handleLogout} variant="danger" fullWidth />
+        <Button
+          title="Cerrar Sesión"
+          onPress={handleLogout}
+          variant="danger"
+          fullWidth
+        />
       </ScrollView>
     </SafeAreaView>
+
   );
 };
 

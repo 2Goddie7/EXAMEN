@@ -7,6 +7,7 @@ import { usePlanesStore } from '../../store/planesStore';
 import { Button } from '../../components/Button';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 
+
 type Props = AsesorStackScreenProps<'PlanDetail'>;
 
 const PlanDetailScreen: React.FC<Props> = ({ navigation, route }) => {
@@ -19,7 +20,7 @@ const PlanDetailScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const handleDelete = () => {
     if (!selectedPlan) return;
-    
+
     Alert.alert(
       'Eliminar Plan',
       `¿Estás seguro de eliminar "${selectedPlan.nombre}"?`,
@@ -43,64 +44,66 @@ const PlanDetailScreen: React.FC<Props> = ({ navigation, route }) => {
     );
   };
 
-  if (!selectedPlan) {
-    return <LoadingSpinner />;
-  }
+  if (!selectedPlan) return <LoadingSpinner />;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView style={styles.safeArea}>
       <ScrollView>
-        <View className="px-6 pt-4 pb-2">
+
+        {/* Back */}
+        <View style={styles.backContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-2xl">←</Text>
+            <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Imagen */}
         {selectedPlan.imagenUrl && (
-          <Image 
-            source={{ uri: selectedPlan.imagenUrl }} 
-            className="w-full h-48" 
-            resizeMode="cover" 
+          <Image
+            source={{ uri: selectedPlan.imagenUrl }}
+            style={styles.image}
+            resizeMode="cover"
           />
         )}
 
-        <View className="px-6 py-6">
-          <View className="flex-row justify-between items-start mb-4">
-            <View className="flex-1">
-              <Text className="text-3xl font-bold text-gray-900 mb-2">
-                {selectedPlan.nombre}
-              </Text>
-              <Text className="text-gray-600 text-base">
-                {selectedPlan.segmento}
-              </Text>
+        {/* Contenido */}
+        <View style={styles.content}>
+
+          {/* Título y precio */}
+          <View style={styles.headerRow}>
+            <View style={styles.headerInfo}>
+              <Text style={styles.planName}>{selectedPlan.nombre}</Text>
+              <Text style={styles.segmento}>{selectedPlan.segmento}</Text>
             </View>
-            <Text className="text-4xl font-bold text-primary-600">
-              {selectedPlan.precioFormateado}/mes
-            </Text>
+
+            <Text style={styles.price}>{selectedPlan.precioFormateado}/mes</Text>
           </View>
 
-          <View className="bg-gray-50 p-4 rounded-xl mb-6">
+          {/* Detalles */}
+          <View style={styles.detailBox}>
             <DetailRow icon="📊" label="Datos" value={selectedPlan.datosGb} />
             <DetailRow icon="📞" label="Minutos" value={selectedPlan.minutos} />
             <DetailRow icon="💬" label="SMS" value={selectedPlan.sms} />
             <DetailRow icon="📡" label="4G" value={selectedPlan.velocidad4g} />
-            {selectedPlan.velocidad5g && (
+
+            {selectedPlan.velocidad5g ? (
               <DetailRow icon="🚀" label="5G" value={selectedPlan.velocidad5g} />
-            )}
+            ) : null}
+
             <DetailRow icon="📱" label="Redes Sociales" value={selectedPlan.redesSociales} />
             <DetailRow icon="💚" label="WhatsApp" value={selectedPlan.whatsapp} />
             <DetailRow icon="🌎" label="Llamadas Int." value={selectedPlan.llamadasInternacionales} />
             <DetailRow icon="✈️" label="Roaming" value={selectedPlan.roaming} />
           </View>
 
-          <View className="bg-blue-50 p-4 rounded-xl mb-6">
-            <Text className="text-sm font-semibold text-gray-700 mb-2">
-              Público Objetivo:
-            </Text>
-            <Text className="text-gray-600">{selectedPlan.publicoObjetivo}</Text>
+          {/* Público Objetivo */}
+          <View style={styles.targetBox}>
+            <Text style={styles.targetLabel}>Público Objetivo:</Text>
+            <Text style={styles.targetText}>{selectedPlan.publicoObjetivo}</Text>
           </View>
 
-          <View className="space-y-3">
+          {/* Botones */}
+          <View style={styles.buttonsContainer}>
             <Button
               title="✏️ Editar Plan"
               onPress={() => navigation.navigate('EditPlan', { planId })}
@@ -115,16 +118,17 @@ const PlanDetailScreen: React.FC<Props> = ({ navigation, route }) => {
             />
           </View>
         </View>
+
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const DetailRow = ({ icon, label, value }: { icon: string; label: string; value: string }) => (
-  <View className="flex-row items-center py-2 border-b border-gray-200">
-    <Text className="text-2xl mr-3">{icon}</Text>
-    <Text className="text-gray-600 flex-1">{label}</Text>
-    <Text className="text-gray-900 font-semibold flex-2 text-right">{value}</Text>
+  <View style={styles.detailRow}>
+    <Text style={styles.detailIcon}>{icon}</Text>
+    <Text style={styles.detailLabel}>{label}</Text>
+    <Text style={styles.detailValue}>{value}</Text>
   </View>
 );
 

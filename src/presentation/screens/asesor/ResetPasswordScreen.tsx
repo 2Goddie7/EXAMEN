@@ -5,6 +5,7 @@ import { UsuarioStackScreenProps } from '../../navigation/types';
 import { useAuthStore } from '../../store/authStore';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
+import { styles } from '../../styles/ResetPasswordStyles';
 
 type Props = UsuarioStackScreenProps<'ResetPassword'>;
 
@@ -52,18 +53,23 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-6">
-        <View className="pt-4 pb-6">
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.scroll}>
+
+        {/* Header */}
+        <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-2xl">←</Text>
+            <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-gray-900 mt-4">
+
+          <Text style={styles.title}>
             Cambiar Contraseña 🔒
           </Text>
         </View>
 
-        <View className="py-6">
+        <View style={styles.formContainer}>
+
+          {/* Nueva contraseña */}
           <Input
             label="Nueva Contraseña"
             value={formData.newPassword}
@@ -74,11 +80,12 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
             placeholder="••••••••"
             secureTextEntry={!showPassword}
             error={errors.newPassword}
-            icon={<Text className="text-xl">🔑</Text>}
-            rightIcon={<Text className="text-xl">{showPassword ? '👁️' : '👁️‍🗨️'}</Text>}
+            icon={<Text style={styles.icon}>🔑</Text>}
+            rightIcon={<Text style={styles.icon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>}
             onRightIconPress={() => setShowPassword(!showPassword)}
           />
 
+          {/* Confirmación */}
           <Input
             label="Confirmar Contraseña"
             value={formData.confirmPassword}
@@ -89,7 +96,7 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
             placeholder="••••••••"
             secureTextEntry={!showPassword}
             error={errors.confirmPassword}
-            icon={<Text className="text-xl">🔑</Text>}
+            icon={<Text style={styles.icon}>🔑</Text>}
           />
 
           <Button
@@ -101,8 +108,9 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
             fullWidth
           />
         </View>
+
       </ScrollView>
-          </SafeAreaView>
+    </SafeAreaView>
   );
 };
 

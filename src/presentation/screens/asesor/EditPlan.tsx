@@ -1,3 +1,4 @@
+// src/presentation/screens/asesor/EditPlanScreen.tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,6 +7,7 @@ import { usePlanesStore } from '../../store/planesStore';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { styles } from '../../styles/EditPlanStyles';
 
 type Props = AsesorStackScreenProps<'EditPlan'>;
 
@@ -14,6 +16,7 @@ const EditPlanScreen: React.FC<Props> = ({ navigation, route }) => {
   const { selectedPlan, fetchPlanById, updatePlan, pickImage } = usePlanesStore();
   const [loading, setLoading] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     nombre: '',
     precio: 0,
@@ -60,7 +63,7 @@ const EditPlanScreen: React.FC<Props> = ({ navigation, route }) => {
     try {
       const uri = await pickImage();
       if (uri) setImageUri(uri);
-    } catch (error) {
+    } catch {
       Alert.alert('Error', 'No se pudo seleccionar la imagen.');
     }
   };
@@ -84,30 +87,36 @@ const EditPlanScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  if (!selectedPlan) {
-    return <LoadingSpinner />;
-  }
+  if (!selectedPlan) return <LoadingSpinner />;
 
   const displayImage = imageUri || formData.imagenUrl;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-6">
-        <View className="pt-4 pb-6">
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.scrollView}>
+        {/* Header */}
+        <View style={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-2xl">←</Text>
+            <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-gray-900 mt-4">Editar Plan 📝</Text>
+
+          <Text style={styles.title}>Editar Plan 📝</Text>
         </View>
 
-        <TouchableOpacity onPress={handleSelectImage} className="bg-gray-100 h-48 rounded-xl mb-6 items-center justify-center">
+        {/* Image Picker */}
+        <TouchableOpacity onPress={handleSelectImage} style={styles.imagePicker}>
           {displayImage ? (
-            <Image source={{ uri: displayImage }} className="w-full h-full rounded-xl" resizeMode="cover" />
+            <Image
+              source={{ uri: displayImage }}
+              style={styles.image}
+              resizeMode="cover"
+            />
           ) : (
-            <Text className="text-gray-500">📷 Seleccionar Imagen</Text>
+            <Text style={styles.imagePickerText}>📷 Seleccionar Imagen</Text>
           )}
         </TouchableOpacity>
 
+        {/* Inputs */}
         <Input label="Nombre *" value={formData.nombre} onChangeText={(text) => setFormData({ ...formData, nombre: text })} />
         <Input label="Precio *" value={String(formData.precio)} onChangeText={(text) => setFormData({ ...formData, precio: parseFloat(text) || 0 })} keyboardType="numeric" />
         <Input label="Datos GB *" value={formData.datosGb} onChangeText={(text) => setFormData({ ...formData, datosGb: text })} />
@@ -123,7 +132,8 @@ const EditPlanScreen: React.FC<Props> = ({ navigation, route }) => {
         <Input label="Público Objetivo *" value={formData.publicoObjetivo} onChangeText={(text) => setFormData({ ...formData, publicoObjetivo: text })} />
 
         <Button title="Actualizar Plan" onPress={handleSubmit} loading={loading} disabled={loading} size="large" fullWidth />
-        <View className="h-8" />
+
+        <View style={styles.bottomSpacing} />
       </ScrollView>
     </SafeAreaView>
   );

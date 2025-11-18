@@ -9,6 +9,7 @@ import { Button } from '../../components/Button';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { styles } from '../../styles/ContratacionDetailStyles';
 
 type Props = AsesorStackScreenProps<'ContratacionDetail'>;
 
@@ -35,7 +36,7 @@ const ContratacionDetailScreen: React.FC<Props> = ({ navigation, route }) => {
             const result = await updateContratacion(contratacionId, user.id, { estado: 'aprobada' });
             if (result.success) {
               Alert.alert('Aprobada', 'Contratación aprobada correctamente.', [
-                { text: 'OK', onPress: () => navigation.goBack() }
+                { text: 'OK', onPress: () => navigation.goBack() },
               ]);
             }
           },
@@ -59,7 +60,7 @@ const ContratacionDetailScreen: React.FC<Props> = ({ navigation, route }) => {
             const result = await updateContratacion(contratacionId, user.id, { estado: 'rechazada' });
             if (result.success) {
               Alert.alert('Rechazada', 'Contratación rechazada.', [
-                { text: 'OK', onPress: () => navigation.goBack() }
+                { text: 'OK', onPress: () => navigation.goBack() },
               ]);
             }
           },
@@ -73,44 +74,54 @@ const ContratacionDetailScreen: React.FC<Props> = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-6">
-        <View className="pt-4 pb-6">
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.scrollView}>
+        {/* Header */}
+        <View style={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-2xl">←</Text>
+            <Text style={styles.backIcon}>←</Text>
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-gray-900 mt-4">
-            Detalle de Contratación
-          </Text>
+
+          <Text style={styles.title}>Detalle de Contratación</Text>
         </View>
 
         {/* Estado */}
         <View
-          className="p-4 rounded-xl mb-6"
-          style={{ backgroundColor: `${selectedContratacion.estadoColor}20` }}
+          style={[
+            styles.estadoContainer,
+            { backgroundColor: `${selectedContratacion.estadoColor}20` },
+          ]}
         >
-          <Text className="text-center text-xl font-bold" style={{ color: selectedContratacion.estadoColor }}>
+          <Text
+            style={[
+              styles.estadoText,
+              { color: selectedContratacion.estadoColor },
+            ]}
+          >
             {selectedContratacion.estadoIcono} {selectedContratacion.estadoTexto}
           </Text>
         </View>
 
         {/* Cliente */}
         {selectedContratacion.usuario && (
-          <View className="bg-gray-50 p-4 rounded-xl mb-4">
-            <Text className="text-sm font-semibold text-gray-700 mb-3">Cliente:</Text>
-            <View className="flex-row items-center">
-              <View className="w-12 h-12 bg-primary-600 rounded-full items-center justify-center mr-3">
-                <Text className="text-white text-xl font-bold">
+          <View style={styles.card}>
+            <Text style={styles.cardLabel}>Cliente:</Text>
+
+            <View style={styles.row}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>
                   {selectedContratacion.usuario.nombreMostrar[0].toUpperCase()}
                 </Text>
               </View>
+
               <View>
-                <Text className="text-lg font-bold text-gray-900">
+                <Text style={styles.userName}>
                   {selectedContratacion.usuario.nombreMostrar}
                 </Text>
-                <Text className="text-gray-600">{selectedContratacion.usuario.email}</Text>
+                <Text style={styles.subText}>{selectedContratacion.usuario.email}</Text>
+
                 {selectedContratacion.usuario.telefono && (
-                  <Text className="text-gray-600">{selectedContratacion.usuario.telefono}</Text>
+                  <Text style={styles.subText}>{selectedContratacion.usuario.telefono}</Text>
                 )}
               </View>
             </View>
@@ -119,61 +130,53 @@ const ContratacionDetailScreen: React.FC<Props> = ({ navigation, route }) => {
 
         {/* Plan */}
         {selectedContratacion.plan && (
-          <View className="bg-gray-50 p-4 rounded-xl mb-4">
-            <Text className="text-sm font-semibold text-gray-700 mb-3">Plan Contratado:</Text>
-            <Text className="text-xl font-bold text-gray-900 mb-2">
-              {selectedContratacion.plan.nombre}
-            </Text>
-            <Text className="text-2xl font-bold text-primary-600">
+          <View style={styles.card}>
+            <Text style={styles.cardLabel}>Plan Contratado:</Text>
+
+            <Text style={styles.planTitle}>{selectedContratacion.plan.nombre}</Text>
+            <Text style={styles.planPrice}>
               {selectedContratacion.plan.precioFormateado}/mes
             </Text>
-            <View className="mt-3 space-y-1">
-              <Text className="text-gray-600">📊 {selectedContratacion.plan.datosGb}</Text>
-              <Text className="text-gray-600">📞 {selectedContratacion.plan.minutos}</Text>
+
+            <View style={styles.planFeatures}>
+              <Text style={styles.subText}>📊 {selectedContratacion.plan.datosGb}</Text>
+              <Text style={styles.subText}>📞 {selectedContratacion.plan.minutos}</Text>
             </View>
           </View>
         )}
 
         {/* Fechas */}
-        <View className="bg-gray-50 p-4 rounded-xl mb-4">
-          <Text className="text-sm font-semibold text-gray-700 mb-3">Fechas:</Text>
-          <Text className="text-gray-600 mb-1">
-            Solicitado: {format(selectedContratacion.fechaContratacion, "d 'de' MMMM, yyyy", { locale: es })}
+        <View style={styles.card}>
+          <Text style={styles.cardLabel}>Fechas:</Text>
+
+          <Text style={styles.subText}>
+            Solicitado:{' '}
+            {format(selectedContratacion.fechaContratacion, "d 'de' MMMM, yyyy", { locale: es })}
           </Text>
+
           {selectedContratacion.fechaAprobacion && (
-            <Text className="text-gray-600">
-              {selectedContratacion.estaAprobada ? 'Aprobado' : 'Rechazado'}: {format(selectedContratacion.fechaAprobacion, "d 'de' MMMM, yyyy", { locale: es })}
+            <Text style={styles.subText}>
+              {selectedContratacion.estaAprobada ? 'Aprobado' : 'Rechazado'}:{' '}
+              {format(selectedContratacion.fechaAprobacion, "d 'de' MMMM, yyyy", { locale: es })}
             </Text>
           )}
         </View>
 
         {/* Notas */}
         {selectedContratacion.notas && (
-          <View className="bg-blue-50 p-4 rounded-xl mb-6">
-            <Text className="text-sm font-semibold text-gray-700 mb-2">Notas:</Text>
-            <Text className="text-gray-600">{selectedContratacion.notas}</Text>
+          <View style={styles.notesContainer}>
+            <Text style={styles.cardLabel}>Notas:</Text>
+            <Text style={styles.subText}>{selectedContratacion.notas}</Text>
           </View>
         )}
 
         {/* Acciones */}
-        {selectedContratacion.estaPendiente && (
-          <View className="space-y-3 mb-6">
-            <Button
-              title="✅ Aprobar Contratación"
-              onPress={handleApprove}
-              variant="primary"
-              fullWidth
-            />
-            <Button
-              title="❌ Rechazar Contratación"
-              onPress={handleReject}
-              variant="danger"
-              fullWidth
-            />
+        {selectedContratacion.estaPendiente ? (
+          <View style={styles.actions}>
+            <Button title="✅ Aprobar Contratación" onPress={handleApprove} variant="primary" fullWidth />
+            <Button title="❌ Rechazar Contratación" onPress={handleReject} variant="danger" fullWidth />
           </View>
-        )}
-
-        {!selectedContratacion.estaPendiente && (
+        ) : (
           <Button
             title="💬 Ir al Chat"
             onPress={() => navigation.navigate('Chat', { contratacionId })}
@@ -182,7 +185,7 @@ const ContratacionDetailScreen: React.FC<Props> = ({ navigation, route }) => {
           />
         )}
 
-        <View className="h-8" />
+        <View style={styles.bottomSpacing} />
       </ScrollView>
     </SafeAreaView>
   );

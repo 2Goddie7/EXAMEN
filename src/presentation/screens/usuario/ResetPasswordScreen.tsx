@@ -52,18 +52,26 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1 px-6">
-        <View className="pt-4 pb-6">
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <ScrollView style={{ flex: 1, paddingHorizontal: 24 }}>
+        <View style={{ paddingTop: 16, paddingBottom: 24 }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-2xl">←</Text>
+            <Text style={{ fontSize: 24 }}>←</Text>
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-gray-900 mt-4">
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: 'bold',
+              color: '#1F2937',
+              marginTop: 16,
+            }}
+          >
             Cambiar Contraseña 🔒
           </Text>
+
         </View>
 
-        <View className="py-6">
+        <View style={{ paddingVertical: 24 }}>
           <Input
             label="Nueva Contraseña"
             value={formData.newPassword}
@@ -74,8 +82,8 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
             placeholder="••••••••"
             secureTextEntry={!showPassword}
             error={errors.newPassword}
-            icon={<Text className="text-xl">🔑</Text>}
-            rightIcon={<Text className="text-xl">{showPassword ? '👁️' : '👁️‍🗨️'}</Text>}
+            icon={<Text style={{ fontSize: 24 }}>🔑</Text>}
+            rightIcon={<Text style={{ fontSize: 24 }}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>}
             onRightIconPress={() => setShowPassword(!showPassword)}
           />
 
@@ -89,7 +97,7 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
             placeholder="••••••••"
             secureTextEntry={!showPassword}
             error={errors.confirmPassword}
-            icon={<Text className="text-xl">🔑</Text>}
+            icon={<Text style={{ fontSize: 20 }}>🔑</Text>}
           />
 
           <Button
@@ -102,7 +110,7 @@ const ResetPasswordScreen: React.FC<Props> = ({ navigation }) => {
           />
         </View>
       </ScrollView>
-          </SafeAreaView>
+    </SafeAreaView>
   );
 };
 

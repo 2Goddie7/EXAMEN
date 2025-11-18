@@ -5,14 +5,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
     "lib": [
       "ES2020"
     ],
     "target": "ES2020",
-    "module": "ESNext",
+    "module": "NodeNext",
     "baseUrl": ".",
     "paths": {
       "@/*": [

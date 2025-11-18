@@ -35,33 +35,67 @@ const MisContratacionesScreen: React.FC<Props> = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      <View className="px-6 pt-6 pb-4 bg-white border-b border-gray-100">
-        <Text className="text-3xl font-bold text-gray-900">Mis Planes 📋</Text>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: '#F9FAFB',
+      }}
+    >
+
+      <View
+        style={{
+          paddingHorizontal: 24,   // px-6
+          paddingTop: 24,          // pt-6
+          paddingBottom: 16,       // pb-4
+          backgroundColor: '#FFFFFF',
+          borderBottomWidth: 1,
+          borderBottomColor: '#F3F4F6', // gray-100
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 30,       
+            fontWeight: 'bold',    
+            color: '#111827',     
+          }}
+        >
+          Mis Planes 📋
+        </Text>
       </View>
 
+
       <ScrollView
-        className="flex-1 px-6 pt-4"
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      >
-        {contrataciones.length === 0 ? (
-          <EmptyState
-            icon="📋"
-            title="No hay contrataciones"
-            message="Aún no has contratado ningún plan."
-            actionLabel="Ver Planes"
-            onAction={() => navigation.navigate('Home')}
+        style={{
+          flex: 1,
+          paddingHorizontal: 24,
+          paddingTop: 16,    
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
           />
-        ) : (
-          contrataciones.map((contratacion) => (
-            <ContratacionCard
-              key={contratacion.id}
-              contratacion={contratacion}
-              onPress={() => !contratacion.estaPendiente && navigation.navigate('Chat', { contratacionId: contratacion.id })}
-            />
-          ))
-        )}
-      </ScrollView>
+        }
+      >
+
+      {contrataciones.length === 0 ? (
+        <EmptyState
+          icon="📋"
+          title="No hay contrataciones"
+          message="Aún no has contratado ningún plan."
+          actionLabel="Ver Planes"
+          onAction={() => navigation.navigate('Home')}
+        />
+      ) : (
+        contrataciones.map((contratacion) => (
+          <ContratacionCard
+            key={contratacion.id}
+            contratacion={contratacion}
+            onPress={() => !contratacion.estaPendiente && navigation.navigate('Chat', { contratacionId: contratacion.id })}
+          />
+        ))
+      )}
+    </ScrollView>
     </SafeAreaView>
   );
 };

@@ -6,13 +6,16 @@ import { useChatStore } from '../../store/chatStore';
 import { useAuthStore } from '../../store/authStore';
 import { ChatBubble } from '../../components/ChatBubble';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { styles } from '../../styles/ChatScreenStyles';
 
 type Props = UsuarioStackScreenProps<'Chat'>;
 
 const ChatsScreen: React.FC<Props> = ({ navigation, route }) => {
   const { contratacionId } = route.params;
-  const { messages, isTyping, fetchMessages, sendMessage, markAsRead, updateTypingStatus, clearTypingStatus, subscribeToMessages, unsubscribeFromMessages } = useChatStore();
+  const { messages, isTyping, fetchMessages, sendMessage, markAsRead, updateTypingStatus, clearTypingStatus, subscribeToMessages, unsubscribeFromMessages } =
+    useChatStore();
   const { user, profile } = useAuthStore();
+
   const [message, setMessage] = useState('');
   const scrollViewRef = useRef<ScrollView>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -36,10 +39,11 @@ const ChatsScreen: React.FC<Props> = ({ navigation, route }) => {
   const handleSend = async () => {
     if (!message.trim() || !user || !profile) return;
 
-    const messageText = message.trim();
+    const msgText = message.trim();
     setMessage('');
 
-    await sendMessage(user.id, { contratacionId, mensaje: messageText }, profile.nombreMostrar);
+    await sendMessage(user.id, { contratacionId, mensaje: msgText }, profile.nombreMostrar);
+
     scrollViewRef.current?.scrollToEnd({ animated: true });
   };
 
@@ -50,6 +54,7 @@ const ChatsScreen: React.FC<Props> = ({ navigation, route }) => {
     updateTypingStatus(contratacionId, user.id, true);
 
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
     typingTimeoutRef.current = setTimeout(() => {
       if (user) updateTypingStatus(contratacionId, user.id, false);
     }, 1000);
@@ -58,39 +63,51 @@ const ChatsScreen: React.FC<Props> = ({ navigation, route }) => {
   if (!user) return <LoadingSpinner />;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="px-6 py-4 border-b border-gray-200 flex-row items-center">
-        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4">
-          <Text className="text-2xl">←</Text>
+    <SafeAreaView style={styles.safeArea}>
+
+      {/* HEADER */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBackButton}>
+          <Text style={styles.headerBackIcon}>←</Text>
         </TouchableOpacity>
+
         <View>
-          <Text className="text-xl font-bold">Chat con Asesor</Text>
-          {isOtherUserTyping && (
-            <Text className="text-sm text-green-600">escribiendo...</Text>
-          )}
+          <Text style={styles.headerTitle}>Chat con Asesor</Text>
+
+          {isOtherUserTyping && <Text style={styles.typingText}>escribiendo...</Text>}
         </View>
       </View>
 
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView
+        style={styles.flex1}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        {/* CHAT LISTA */}
         <ScrollView
           ref={scrollViewRef}
-          className="flex-1 px-6 py-4"
+          style={styles.chatScroll}
           onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
         >
           {chatMessages.map((msg) => (
-            <ChatBubble key={msg.id} mensaje={msg} isMine={msg.remitenteId === user.id} />
+            <ChatBubble
+              key={msg.id}
+              mensaje={msg}
+              isMine={msg.remitenteId === user.id}
+            />
           ))}
         </ScrollView>
 
-        <View className="px-6 py-4 border-t border-gray-200 flex-row items-center">
+        {/* INPUT */}
+        <View style={styles.inputContainer}>
           <TextInput
             value={message}
             onChangeText={handleTextChange}
             placeholder="Escribe un mensaje..."
-            className="flex-1 bg-gray-100 rounded-full px-4 py-3 mr-2"
+            style={styles.messageInput}
           />
-          <TouchableOpacity onPress={handleSend} className="bg-primary-600 w-12 h-12 rounded-full items-center justify-center">
-            <Text className="text-white text-xl">➤</Text>
+
+          <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+            <Text style={styles.sendButtonIcon}>➤</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

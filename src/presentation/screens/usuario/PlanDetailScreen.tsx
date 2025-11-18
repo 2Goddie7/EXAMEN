@@ -45,23 +45,74 @@ const PlanDetailScreen: React.FC<Props> = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: '#FFFFFF',
+      }}
+    >
       <ScrollView>
-        <View className="px-6 pt-4 pb-2">
+        <View
+          style={{
+            paddingHorizontal: 24, 
+            paddingTop: 16,      
+            paddingBottom: 8,     
+          }}
+        >
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text className="text-2xl">←</Text>
+            <Text style={{ fontSize: 24 }}>←</Text> {/* text-2xl */}
           </TouchableOpacity>
         </View>
 
         {selectedPlan.imagenUrl && (
-          <Image source={{ uri: selectedPlan.imagenUrl }} className="w-full h-48" resizeMode="cover" />
+          <Image
+            source={{ uri: selectedPlan.imagenUrl }}
+            style={{
+              width: '100%',
+              height: 192,
+            }}
+            resizeMode="cover"
+          />
+
         )}
 
-        <View className="px-6 py-6">
-          <Text className="text-3xl font-bold text-gray-900 mb-2">{selectedPlan.nombre}</Text>
-          <Text className="text-4xl font-bold text-primary-600 mb-4">{selectedPlan.precioFormateado}/mes</Text>
-          
-          <View className="bg-gray-50 p-4 rounded-xl mb-6">
+        <View
+          style={{
+            paddingHorizontal: 24,
+            paddingVertical: 24,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: 'bold',
+              color: '#111827', // gray-900
+              marginBottom: 8,
+            }}
+          >
+            {selectedPlan.nombre}
+          </Text>
+
+          <Text
+            style={{
+              fontSize: 36,
+              fontWeight: 'bold',
+              color: '#2563EB', // primary-600 (Aprox Tailwind blue-600)
+              marginBottom: 16,
+            }}
+          >
+            {selectedPlan.precioFormateado}/mes
+          </Text>
+
+          <View
+            style={{
+              backgroundColor: '#F9FAFB', // gray-50
+              padding: 16,
+              borderRadius: 12,
+              marginBottom: 24,
+            }}
+          >
+
             <DetailRow icon="📊" label="Datos" value={selectedPlan.datosGb} />
             <DetailRow icon="📞" label="Minutos" value={selectedPlan.minutos} />
             <DetailRow icon="💬" label="SMS" value={selectedPlan.sms} />
@@ -90,11 +141,31 @@ const PlanDetailScreen: React.FC<Props> = ({ navigation, route }) => {
 };
 
 const DetailRow = ({ icon, label, value }: { icon: string; label: string; value: string }) => (
-  <View className="flex-row items-center py-2 border-b border-gray-200">
-    <Text className="text-2xl mr-3">{icon}</Text>
-    <Text className="text-gray-600 flex-1">{label}</Text>
-    <Text className="text-gray-900 font-semibold flex-2 text-right">{value}</Text>
+  <View
+    style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: '#E5E7EB', // gray-200
+    }}
+  >
+    <Text style={{ fontSize: 24, marginRight: 12 }}>{icon}</Text>
+
+    <Text style={{ color: '#4B5563', flex: 1 }}>{label}</Text>
+
+    <Text
+      style={{
+        color: '#111827',
+        fontWeight: '600',
+        flex: 2,
+        textAlign: 'right',
+      }}
+    >
+      {value}
+    </Text>
   </View>
+
 );
 
 export default PlanDetailScreen;
