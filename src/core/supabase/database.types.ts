@@ -43,6 +43,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       planes_moviles: {
         Row: {
@@ -105,6 +106,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       contrataciones: {
         Row: {
@@ -143,6 +145,26 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "contrataciones_usuario_id_fkey";
+            columns: ["usuario_id"];
+            referencedRelation: "perfiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "contrataciones_plan_id_fkey";
+            columns: ["plan_id"];
+            referencedRelation: "planes_moviles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "contrataciones_asesor_id_fkey";
+            columns: ["asesor_id"];
+            referencedRelation: "perfiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       mensajes_chat: {
         Row: {
@@ -169,6 +191,20 @@ export interface Database {
           leido?: boolean;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "mensajes_chat_contratacion_id_fkey";
+            columns: ["contratacion_id"];
+            referencedRelation: "contrataciones";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "mensajes_chat_remitente_id_fkey";
+            columns: ["remitente_id"];
+            referencedRelation: "perfiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       chat_typing: {
         Row: {
@@ -192,6 +228,20 @@ export interface Database {
           is_typing?: boolean;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "chat_typing_contratacion_id_fkey";
+            columns: ["contratacion_id"];
+            referencedRelation: "contrataciones";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "chat_typing_usuario_id_fkey";
+            columns: ["usuario_id"];
+            referencedRelation: "perfiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
     };
     Views: {

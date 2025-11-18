@@ -1,11 +1,14 @@
-import { supabase } from '@core/supabase/client';
-import { Perfil } from '@domain/entities';
+import { supabase } from '../../core/supabase/client';
+import { Perfil } from '../../domain/entities';
 import { AuthError, Session, User } from '@supabase/supabase-js';
+import type { Database } from '../../core/supabase/database.types';
+
+type PerfilUpdate = Database['public']['Tables']['perfiles']['Update'];
 
 export interface AuthResponse {
   success: boolean;
-  user?: User;
-  session?: Session;
+  user?: User | null;
+  session?: Session | null;
   error?: string;
 }
 
@@ -37,13 +40,17 @@ export class AuthRepository {
 
       // Actualizar perfil con nombre completo
       if (data.user) {
+        const updateData: PerfilUpdate = {
+          nombre_completo: nombreCompleto
+        };
+
         await supabase
           .from('perfiles')
-          .update({ nombre_completo: nombreCompleto })
+          .update(updateData)
           .eq('id', data.user.id);
       }
 
-      return { success: true, user: data.user, session: data.session || undefined };
+      return { success: true, user: data.user, session: data.session };
     } catch (error) {
       const authError = error as AuthError;
       return { success: false, error: authError.message };
@@ -175,7 +182,7 @@ export class AuthRepository {
     }
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      const updateData: Record<string, any> = {
+      const updateData: PerfilUpdate = {
         updated_at: new Date().toISOString(),
       };
 
