@@ -10,10 +10,10 @@ import ContratacionesScreen from '../screens/asesor/ContratacionesScreen';
 import ChatsScreen from '../screens/asesor/ChatsScreen';
 import PerfilScreen from '../screens/asesor/PerfilScreen';
 import CreatePlanScreen from '../screens/asesor/CreatePlanScreen';
-import EditPlanScreen from '../screens/asesor/EditPlanScreen';
+import EditPlanScreen from '../screens/asesor/EditPlan';
 import PlanDetailScreen from '../screens/asesor/PlanDetailScreen';
 import ContratacionDetailScreen from '../screens/asesor/ContratacionDetailScreen';
-import ChatScreen from '../screens/asesor/ChatScreen';
+import ChatScreen from '../screens/asesor/ChatsScreen';
 import EditProfileScreen from '../screens/asesor/EditProfileScreen';
 import ResetPasswordScreen from '../screens/asesor/ResetPasswordScreen';
 
